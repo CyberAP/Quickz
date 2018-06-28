@@ -1,15 +1,14 @@
 <template>
     <div class="attempts-list">
-        <div class="attempts-list--row" :class="{'attempts-list--row__correct': row.correct}" v-for="row in sortedData">
+        <div class="attempts-list--row" :class="{'attempts-list--row__correct': row.correct}" v-for="row in attempts">
             <div class="attempts-list--name">
                 {{row.name}}
             </div>
             <div class="attempts-list--date">
                 {{row.date}}s
             </div>
-            <div class="attempts-list--actions">
+            <div class="attempts-list--actions" v-if="admin && state.isAdmin">
                 <button
-                        v-if="state.isAdmin && controls"
                         @click="dispatch('score', row.name)"
                 >Correct</button>
             </div>
@@ -18,25 +17,17 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: 'AttemptsList',
         props: {
-            controls: {
+            admin: {
                 type: Boolean,
-                required: false
             },
-            data: {
-                type: Object,
-                required: true,
-                default: () => {}
-            }
         },
         computed: {
-            sortedData() {
-                const data = Object.keys(this.data).map((key) => { return { name: key, ...this.data[key] } });
-
-                return data.sort((a,b) => { return new Date(a.date) > new Date(b.date) });
-            },
+            ...mapGetters(['attempts'])
         }
     }
 </script>

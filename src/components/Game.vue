@@ -44,8 +44,8 @@
                         class="answer"
                         key="answer"
                         data-key="answer"
-                        v-if="state.answer && countdown < 1 && game.roundStarted"
-                >Answer: {{state.answer}}</div>
+                        v-if="game.answer && countdown < 1 && game.roundStarted"
+                >Answer: {{game.answer}}</div>
             </transition-group>
 
             <transition-group
@@ -59,7 +59,7 @@
                         key="submit"
                         data-key="submit"
                         @click="dispatch('attempt')"
-                        v-if="!(state.auth in game.attempts) && countdown < 1 && game.roundStarted && !presentation"
+                        v-if="game.attempts && !(state.auth in game.attempts) && countdown < 1 && game.roundStarted && !presentation"
                 >Got the answer!</button>
             </transition-group>
 
@@ -73,7 +73,6 @@
                         v-if="game.attempts && countdown < 1 && game.roundStarted"
                         key="attempts"
                         data-key="attempts"
-                        :data="game.attempts"
                         :controls="!presentation"
                 ></AttemptsList>
             </transition-group>
@@ -90,7 +89,9 @@
         props: {
             presentation: {
                 type: Boolean,
-                required: false
+            },
+            admin: {
+                type: Boolean,
             }
         },
         components: {
