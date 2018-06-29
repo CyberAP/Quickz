@@ -11,7 +11,8 @@ const Helpers = {
         ];
 
         const VuexProps = [
-            'state'
+            'state',
+            'getters'
         ];
 
         VuexMethods.forEach((method) => {

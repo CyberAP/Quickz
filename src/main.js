@@ -16,8 +16,14 @@ export default new Vue({
     router,
     store,
     sockets: {
-        connect: function() {
-            this.dispatch('authorize');
+        connect() {
+            this.dispatch('connect');
+        },
+        reconnect() {
+            this.dispatch('connect');
+        },
+        disconnect() {
+            this.dispatch('logOut');
         }
     },
     render: h => h(App),

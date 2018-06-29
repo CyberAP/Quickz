@@ -9,9 +9,18 @@
                 <input v-model="auth">
                 <button>Log in</button>
             </form>
-            <div class="game" v-else>
+            <div class="game">
 
-                <Game v-if="!showScoreboard"></Game>
+                <div class="controls" v-if="state.isAdmin">
+                    <button @click="dispatch('startGame')">Start game</button>
+                    <button @click="dispatch('prevRound')">Prev round</button>
+                    <button @click="dispatch('nextRound')">Next round</button>
+                    <button @click="dispatch('startRound')">Start round</button>
+                    <button @click="dispatch('toggleAnswer')">Toggle answer</button>
+                    <button @click="showScoreboard = !showScoreboard">Toggle scoreboard</button>
+                </div>
+
+                <Game v-if="(state.auth || state.isAdmin) && !showScoreboard"></Game>
 
                 <ScoreBoard :data="state.game.scoreBoard" v-if="showScoreboard && state.game.scoreBoard"></ScoreBoard>
 

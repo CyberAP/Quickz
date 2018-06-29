@@ -8,7 +8,8 @@ export default new Vuex.Store({
     state: {
         auth: '',
         game: {},
-        isAdmin: false
+        isAdmin: false,
+        adminData: {}
     },
     mutations: {
         SOCKET_AUTH_SUCCESS(state, auth) {
@@ -16,6 +17,7 @@ export default new Vuex.Store({
             localStorage.setItem('auth', auth);
         },
         SOCKET_AUTH_FAIL(state, message) {
+            console.log('auth fail');
             state.auth = '';
             localStorage.setItem('auth', '');
         },
@@ -34,6 +36,9 @@ export default new Vuex.Store({
         SOCKET_SYNC(state, game) {
             Vue.set(state, 'game', game);
         },
+        SOCKET_ADMIN_SYNC(state, adminData) {
+            Vue.set(state, 'adminData', adminData);
+        },
     },
     actions: {
         authorize(context, auth) {
@@ -41,9 +46,12 @@ export default new Vuex.Store({
             vm.$socket.emit('authorize', auth);
         },
         admin(context, adminPassword) {
-            if (context.isAdmin) return;
-            if (!adminPassword) { adminPassword = localStorage.getItem('adminPassword') }
+            if (!adminPassword) { adminPassword = localStorage.getItem('admin') }
             vm.$socket.emit('admin', adminPassword);
+        },
+        connect(context) {
+            context.getters.auth && context.dispatch('authorize');
+            context.getters.admin && context.dispatch('admin');
         },
         logOut(context) {
             vm.$socket.emit('log_out');
@@ -57,13 +65,13 @@ export default new Vuex.Store({
         nextRound(context) {
             vm.$socket.emit('next_round');
         },
-        startRound() {
+        startRound(context) {
             vm.$socket.emit('start_round');
         },
-        toggleAnswer() {
+        toggleAnswer(context) {
             vm.$socket.emit('toggle_answer');
         },
-        attempt() {
+        attempt(context) {
             vm.$socket.emit('attempt');
         },
         score(context, participant) {
@@ -74,8 +82,17 @@ export default new Vuex.Store({
         attempts(state) {
             const obj = state.game.attempts;
             if (!obj) return [];
-            const arr = Object.keys(obj).map((key) => { return { name: key, ...obj[key] } });
+            const arr = Object.keys(obj).map((key) => { return {  ...obj[key], name: key } });
             return arr.length ? arr.sort((a,b) => { return new Date(a.date) > new Date(b.date) }) : arr;
+        },
+        auth(state) {
+            return state.auth || localStorage.getItem('auth');
+        },
+        admin(state) {
+            return state.admin || localStorage.getItem('admin');
+        },
+        games(state) {
+            return state.adminData.games || [];
         }
     }
 });

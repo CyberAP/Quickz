@@ -53,8 +53,9 @@ class Game {
     }
 
     startRound() {
-        if (this.currentRoundId < 0) return;
-        this.rounds[this.currentRoundId].attempts = {};
+        if (this.currentRoundId === -1) this.nextRound();
+        if (this.currentRoundId < -1) return;
+        this.currentRound.attempts = {};
         this.roundStarted = true;
         this.roundStartDate = new Date();
         if (this.currentRoundId === 0)
@@ -76,6 +77,7 @@ class Game {
 
     score(participant) {
         if (!this.currentRound || !this.currentRound.attempts) return;
+
         const attempt = this.currentRound.attempts[participant];
         if (attempt.correct) return;
 

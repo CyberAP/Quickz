@@ -1,6 +1,10 @@
 <template>
     <div class="attempts-list">
-        <div class="attempts-list--row" :class="{'attempts-list--row__correct': row.correct}" v-for="row in attempts">
+        <div
+                class="attempts-list--row"
+                v-for="row in attempts"
+                :class="{'attempts-list--row__correct': row.correct}"
+                :key="row.name">
             <div class="attempts-list--name">
                 {{row.name}}
             </div>

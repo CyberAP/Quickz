@@ -2,7 +2,7 @@
     <div class="scoreboard">
         <h6 class="scoreboard--title">Scores</h6>
         <div class="scoreboard--table">
-            <div class="scoreboard--row" v-for="row in processedData">
+            <div class="scoreboard--row" v-for="row in processedData" :key="row.name">
                 <div class="scoreboard--name">
                     {{row.name}}
                 </div>
