@@ -2,6 +2,7 @@
 node_modules
 /dist
 /games
+/server/server.config.json
 
 # local env files
 .env
