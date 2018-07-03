@@ -17,12 +17,12 @@
                     <button @click="dispatch('nextRound')">Next round</button>
                     <button @click="dispatch('startRound')">Start round</button>
                     <button @click="dispatch('toggleAnswer')">Toggle answer</button>
-                    <button @click="showScoreboard = !showScoreboard">Toggle scoreboard</button>
+                    <button @click="dispatch('endGame')">End game</button>
                 </div>
 
-                <Game v-if="(state.auth || state.isAdmin) && !showScoreboard"></Game>
+                <Game v-if="(state.auth || state.isAdmin) && !state.game.gameEnded"></Game>
 
-                <ScoreBoard :data="state.game.scoreBoard" v-if="showScoreboard && state.game.scoreBoard"></ScoreBoard>
+                <ScoreBoard v-if="state.game.gameEnded"></ScoreBoard>
 
             </div>
         </div>

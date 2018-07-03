@@ -7,6 +7,7 @@ class Game {
         this.currentRoundId = -1;
         this.roundStarted = false;
         this.answerVisible = false;
+        this.gameEnded = false;
     }
 
     get currentRound() {
@@ -21,21 +22,20 @@ class Game {
             answer:  this.currentRound && this.answerVisible ? this.currentRound.answer : '',
             countdownDate: this.countdownDate,
             roundStarted: this.roundStarted,
-        }
-    }
-
-    get exportData() {
-        return {
-            name: this.name,
-            rounds: this.rounds,
-            teams: this.teams,
+            gameEnded: this.gameEnded
         }
     }
 
     startGame() {
-        this.scoreBoard = {};
+        this.gameEnded = false;
         this.currentRoundId = -1;
         this.nextRound();
+
+        return this;
+    }
+
+    endGame() {
+        this.gameEnded = true;
 
         return this;
     }

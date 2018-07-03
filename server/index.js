@@ -35,9 +35,11 @@ const gamesPath  = 'games';
 const password = process.env.password || '123';
 const clients = new Set;
 
-const main = (async function() {
-    savedGames = (await loadSavedGames()).filter(game => game);
-    return loadConfig()
+const main = (_ => {
+    return loadSavedGames()
+        .catch(handleError)
+
+        .then(loadConfig)
         .catch(handleError)
 
         .then(loadLastGame)
@@ -54,6 +56,7 @@ io.on('connection', socket => {
             if (!currentGame) reject('No game to sync');
             const gameData = currentGame.publicData;
             if (!gameData) reject('No game data available');
+            console.log('Game synced');
             resolve(syncGameData(socket, gameData));
         });
     };
@@ -82,9 +85,6 @@ io.on('connection', socket => {
         socket.emit('auth_success', currentClient);
 
         console.log(`Client ${currentClient} authorized`);
-
-        if (!currentGame) return;
-        sync().catch(handleError);
     });
 
     socket.on('log_out', logOut);
@@ -104,6 +104,7 @@ io.on('connection', socket => {
         'next_round',
         'start_round',
         'toggle_answer',
+        'end_game'
     ];
 
     commonActions.forEach(action => {
@@ -116,7 +117,7 @@ io.on('connection', socket => {
     });
 
     socket.on('attempt', () => {
-        if (!currentGame) return;
+        if (!currentGame || !currentClient) return;
         currentGame.registerAttempt(currentClient);
         sync().catch(handleError);
     });
@@ -170,8 +171,8 @@ io.on('connection', socket => {
     });
 });
 
-function loadSavedGames() {
-    return readDir(gamesPath)
+async function loadSavedGames() {
+    const games = readDir(gamesPath)
         .catch(handleError)
         .then(files => {
             const promises = files.map(file => {
@@ -192,6 +193,8 @@ function loadSavedGames() {
             });
             return Promise.all(promises);
         });
+    savedGames = (await games).filter(game => game);
+    return games;
 }
 
 function loadGame(gameName) {
@@ -219,7 +222,7 @@ function saveGame(game) {
 function deleteGame(gameName) {
     const filename = `${gamesPath}/${gameName}.json`;
 
-    return unlink(filename);
+    return unlink(filename).catch(handleError).then(loadSavedGames);
 }
 
 function loadConfig() {
