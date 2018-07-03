@@ -29,4 +29,13 @@
         line-height: 1.25;
     }
 
+    .page-width
+    {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
 </style>

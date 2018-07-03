@@ -11,7 +11,7 @@
             <div class="attempts-list--date">
                 {{row.date}}s
             </div>
-            <div class="attempts-list--actions" v-if="admin && state.isAdmin">
+            <div class="attempts-list--actions" v-if="state.isAdmin">
                 <button
                         @click="dispatch('score', row.name)"
                 >Correct</button>

@@ -1,5 +1,5 @@
 <template>
-    <BasicLayout>
+    <MainLayout>
         <div class="admin">
             <form
                     class="admin--auth"
@@ -10,20 +10,21 @@
                 <button>Log in</button>
             </form>
             <div class="admin--main" v-else>
+                <button @click="dispatch('createGame')">Create new game</button>
                 <GamesList></GamesList>
             </div>
         </div>
-    </BasicLayout>
+    </MainLayout>
 </template>
 
 <script>
-    import BasicLayout from '@/layouts/BasicLayout';
+    import MainLayout from '@/layouts/MainLayout';
     import GamesList from '@/components/GamesList';
 
     export default {
         name: 'Admin',
         components: {
-            BasicLayout,
+            MainLayout,
             GamesList
         },
         data() {

@@ -1,5 +1,5 @@
 <template>
-    <BasicLayout>
+    <MainLayout>
         <div class="home">
             <form
                     class="auth"
@@ -26,18 +26,18 @@
 
             </div>
         </div>
-    </BasicLayout>
+    </MainLayout>
 </template>
 
 <script>
-    import BasicLayout from '@/layouts/BasicLayout';
+    import MainLayout from '@/layouts/MainLayout';
     import Game from '@/components/Game';
     import ScoreBoard from '@/components/ScoreBoard';
 
     export default {
         name: 'home',
         components: {
-            BasicLayout,
+            MainLayout,
             Game,
             ScoreBoard,
         },

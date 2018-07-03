@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import vm from './main.js';
+import router from './router.js';
 
 Vue.use(Vuex);
 
@@ -17,7 +18,6 @@ export default new Vuex.Store({
             localStorage.setItem('auth', auth);
         },
         SOCKET_AUTH_FAIL(state, message) {
-            console.log('auth fail');
             state.auth = '';
             localStorage.setItem('auth', '');
         },
@@ -56,8 +56,20 @@ export default new Vuex.Store({
         logOut(context) {
             vm.$socket.emit('log_out');
         },
+        toggleAnswer(context) {
+            vm.$socket.emit('toggle_answer');
+        },
+        attempt(context) {
+            vm.$socket.emit('attempt');
+        },
+        score(context, participant) {
+            vm.$socket.emit('score', participant);
+        },
         startGame(context) {
             vm.$socket.emit('start_game');
+        },
+        endGame(context) {
+            vm.$socket.emit('end_game');
         },
         prevRound(context) {
             vm.$socket.emit('prev_round');
@@ -68,15 +80,24 @@ export default new Vuex.Store({
         startRound(context) {
             vm.$socket.emit('start_round');
         },
-        toggleAnswer(context) {
-            vm.$socket.emit('toggle_answer');
+        loadGame(context, gameName) {
+            vm.$socket.emit('load_game', gameName);
         },
-        attempt(context) {
-            vm.$socket.emit('attempt');
+        saveGame(context, game) {
+            vm.$socket.emit('save_game', game);
         },
-        score(context, participant) {
-            vm.$socket.emit('score', participant);
+        deleteGame(context, gameName) {
+            vm.$socket.emit('delete_game', gameName);
         },
+        createGame(context) {
+            router.push({ name: 'createGame' });
+        },
+        editGame(context, gameName) {
+            router.push({
+                name: 'editGame',
+                params: { gameName }
+            });
+        }
     },
     getters: {
         attempts(state) {
@@ -92,7 +113,7 @@ export default new Vuex.Store({
             return state.admin || localStorage.getItem('admin');
         },
         games(state) {
-            return state.adminData.games || [];
+            return state.adminData.savedGames || [];
         }
     }
 });

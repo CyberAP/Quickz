@@ -1,8 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-import Presentation from './views/Presentation.vue';
-import Admin from './views/Admin.vue';
+import Home from './views/Home';
+import Presentation from './views/Presentation';
+import Admin from './views/Admin';
+import CreateGame from  './views/CreateGame';
+import EditGame from  './views/EditGame';
 
 Vue.use(Router);
 
@@ -23,6 +25,16 @@ export default new Router({
             path: '/admin',
             name: 'admin',
             component: Admin
-        }
+        },
+        {
+            path: '/create-game',
+            name: 'createGame',
+            component: CreateGame
+        },
+        {
+            path: '/edit-game/:gameName',
+            name: 'editGame',
+            component: EditGame
+        },
     ]
 })

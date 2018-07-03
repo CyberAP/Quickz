@@ -2,7 +2,7 @@
     <div class="scoreboard">
         <h6 class="scoreboard--title">Scores</h6>
         <div class="scoreboard--table">
-            <div class="scoreboard--row" v-for="row in processedData" :key="row.name">
+            <div class="scoreboard--row" v-for="row in state.game.scoreBoard" :key="row.name">
                 <div class="scoreboard--name">
                     {{row.name}}
                 </div>
@@ -17,37 +17,6 @@
 <script>
     export default {
         name: 'ScoreBoard',
-        props: {
-            data: {
-                type: Object,
-                required: true,
-                default: () => {}
-            },
-            sortBy: {
-                type: String,
-            },
-            sortValueTransform: {
-                type: Function,
-            }
-        },
-        computed: {
-            processedData() {
-                const data = Object.keys(this.data).map((key) => { return { name: key, score: this.data[key] } });
-
-                if (!this.sortBy) return data;
-
-                return data.sort((a,b) => {
-                    let leftVal = a[this.sortBy];
-                    let rightVal = b[this.sortBy];
-                    if (this.sortValueTransform)
-                    {
-                        leftVal = this.sortValueTransform(leftVal);
-                        rightVal = this.sortValueTransform(rightVal);
-                    }
-                    return leftVal > rightVal;
-                });
-            },
-        }
     }
 </script>
 

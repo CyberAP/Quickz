@@ -1,14 +1,8 @@
 <template>
     <div class="layout">
-        <div class="header">
+        <div v-if="$slots.header" class="header">
             <div class="header--container page-width">
-                <div class="team-name" v-if="state.auth">{{state.auth}}</div>
-                <div class="nav">
-                    <router-link class="nav--link" to="/">Home</router-link>
-                    <router-link class="nav--link" to="/admin">Admin</router-link>
-                    <router-link class="nav--link" to="/presentation">Presentation</router-link>
-                </div>
-                <button class="logOut" v-if="state.auth" @click="dispatch('logOut')">Log out</button>
+                <slot name="header"></slot>
             </div>
         </div>
         <div class="contents">
@@ -21,20 +15,11 @@
 
 <script>
     export default {
-        name: 'basicLayout',
+        name: 'BaseLayout',
     }
 </script>
 
 <style>
-    .page-width
-    {
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
     .header
     {
         padding: 10px 0;

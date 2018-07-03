@@ -1,17 +1,17 @@
 <template>
-    <BasicLayout>
+    <BaseLayout>
         <Game presentation></Game>
-    </BasicLayout>
+    </BaseLayout>
 </template>
 
 <script>
-    import BasicLayout from '@/layouts/BasicLayout';
+    import BaseLayout from '@/layouts/BaseLayout';
     import Game from '@/components/Game';
 
     export default {
         name: 'Presentation',
         components: {
-            BasicLayout,
+            BaseLayout,
             Game
         }
     }
