@@ -1,6 +1,7 @@
 .DS_Store
 node_modules
 /dist
+/media
 /games
 /server/server.config.json
 

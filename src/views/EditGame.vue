@@ -1,32 +1,31 @@
 <template>
-    <MainLayout>
-        <div class="create-game">
-            <GameEdit v-if="savedGame" :savedGame="savedGame"></GameEdit>
-            <div v-else>Game '{{gameName}}' not found</div>
+    <div class="create-game">
+        <GameEdit v-if="savedGame" :savedGame="savedGame"></GameEdit>
+        <div class="page-width" v-else>
+            <div>Game №{{gameId}} not found</div>
         </div>
-    </MainLayout>
+    </div>
 </template>
 
 <script>
-    import MainLayout from '@/layouts/MainLayout';
     import GameEdit from '@/components/GameEdit';
 
     export default {
         name: 'Admin',
         components: {
-            MainLayout,
             GameEdit
         },
         data() {
             return {
-                savedGame: undefined,
-                gameName: this.$route.params.gameName
+
             }
         },
-        created() {
-            if (this.state.adminData && Array.isArray(this.state.adminData.savedGames))
-            {
-                this.savedGame = this.state.adminData.savedGames.find(game => game.name === this.gameName);
+        computed: {
+            gameId() {
+               return +this.$route.params.gameId;
+            },
+            savedGame() {
+                return this.state?.adminData?.savedGames?.find(game => game.id === this.gameId);
             }
         }
     }

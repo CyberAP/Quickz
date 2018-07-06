@@ -1,17 +1,9 @@
 <template>
     <MainLayout>
         <div class="admin">
-            <form
-                    class="admin--auth"
-                    @submit.prevent="dispatch('admin', auth); auth = '';"
-                    v-if="!state.isAdmin"
-            >
-                <input v-model="auth">
-                <button>Log in</button>
-            </form>
+            <Auth @auth="dispatch('admin', $event)" v-if="!state.isAdmin"/>
             <div class="admin--main" v-else>
-                <button @click="dispatch('createGame')">Create new game</button>
-                <GamesList></GamesList>
+                <router-view></router-view>
             </div>
         </div>
     </MainLayout>
@@ -19,13 +11,13 @@
 
 <script>
     import MainLayout from '@/layouts/MainLayout';
-    import GamesList from '@/components/GamesList';
+    import Auth from "@/components/Auth";
 
     export default {
         name: 'Admin',
         components: {
-            MainLayout,
-            GamesList
+            Auth,
+            MainLayout
         },
         data() {
             return {
@@ -34,3 +26,10 @@
         }
     }
 </script>
+
+<style scoped>
+    .admin
+    {
+        margin: 20px 0;
+    }
+</style>

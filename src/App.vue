@@ -29,13 +29,39 @@
         line-height: 1.25;
     }
 
+    img,
+    audio,
+    video
+    {
+        max-width: 100%;
+    }
+
     .page-width
     {
-        max-width: 800px;
+        max-width: 1200px;
         margin-left: auto;
         margin-right: auto;
         padding-left: 20px;
         padding-right: 20px;
+    }
+
+    .button
+    {
+        padding: 5px 12px;
+        border: none;
+        border-radius: 6px;
+        background-color: rgb(103, 163, 238);
+        color: #fff;
+    }
+
+    .button-list
+    {
+        margin: 10px -5px;
+    }
+
+    .button-list--button
+    {
+        margin: 5px;
     }
 
 </style>

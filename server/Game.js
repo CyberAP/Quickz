@@ -1,13 +1,14 @@
 class Game {
 
-    constructor({ name, rounds, teams }) {
+    constructor({ id, name, rounds, teams, gameEnded }) {
+        this.id = id;
         this.name = name || new Date().toLocaleDateString("ru-RU");
         this.rounds = rounds || [];
         this.teams = teams || {};
         this.currentRoundId = -1;
         this.roundStarted = false;
         this.answerVisible = false;
-        this.gameEnded = false;
+        this.gameEnded = gameEnded || false;
     }
 
     get currentRound() {
@@ -16,6 +17,8 @@ class Game {
 
     get publicData() {
         return {
+            id: this.id,
+            name: this.name,
             teams: this.teams,
             attempts: (this.currentRound && this.currentRound.attempts) ? this.currentRound.attempts : {},
             question: this.currentRound ? this.currentRound.question : '',
@@ -60,7 +63,7 @@ class Game {
 
     startRound() {
         if (this.currentRoundId === -1) this.nextRound();
-        if (this.currentRoundId < -1) return this;
+        if (!this.currentRound || this.currentRoundId < -1) return this;
         this.currentRound.attempts = {};
         this.roundStarted = true;
         this.roundStartDate = new Date();

@@ -8,7 +8,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         auth: '',
-        game: {},
+        game: undefined,
         isAdmin: false,
         adminData: {}
     },
@@ -80,30 +80,31 @@ export default new Vuex.Store({
         startRound(context) {
             vm.$socket.emit('start_round');
         },
-        loadGame(context, gameName) {
-            vm.$socket.emit('load_game', gameName);
+        loadGame(context, gameId) {
+            vm.$socket.emit('load_game', gameId);
+        },
+        unloadGame(context) {
+            vm.$socket.emit('unload_game');
         },
         saveGame(context, game) {
             vm.$socket.emit('save_game', game);
         },
-        deleteGame(context, gameName) {
-            vm.$socket.emit('delete_game', gameName);
+        deleteGame(context, gameId) {
+            vm.$socket.emit('delete_game', gameId);
         },
-        createGame(context) {
-            router.push({ name: 'createGame' });
-        },
-        editGame(context, gameName) {
+
+        goToEditGame(context, gameId) {
             router.push({
-                name: 'editGame',
-                params: { gameName }
+                name: 'EditGame',
+                params: { gameId }
             });
-        }
+        },
     },
     getters: {
         attempts(state) {
-            const obj = state.game.attempts;
-            if (!obj) return [];
-            const arr = Object.keys(obj).map((key) => { return {  ...obj[key], name: key } });
+            const attempts = state.game?.attempts;
+            if (!attempts) return [];
+            const arr = Object.keys(attempts).map((key) => { return {  ...attempts[key], name: key } });
             return arr.length ? arr.sort((a,b) => { return new Date(a.date) > new Date(b.date) }) : arr;
         },
         auth(state) {
@@ -114,6 +115,6 @@ export default new Vuex.Store({
         },
         games(state) {
             return state.adminData.savedGames || [];
-        }
+        },
     }
 });

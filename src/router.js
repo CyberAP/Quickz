@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './views/Home';
 import Presentation from './views/Presentation';
 import Admin from './views/Admin';
+import AdminIndex from './views/AdminIndex';
 import CreateGame from  './views/CreateGame';
 import EditGame from  './views/EditGame';
 
@@ -13,28 +14,34 @@ export default new Router({
     routes: [
         {
             path: '/',
-            name: 'home',
+            name: 'Home',
             component: Home
         },
         {
             path: '/presentation',
-            name: 'presentation',
+            name: 'Presentation',
             component: Presentation
         },
         {
             path: '/admin',
-            name: 'admin',
-            component: Admin
-        },
-        {
-            path: '/create-game',
-            name: 'createGame',
-            component: CreateGame
-        },
-        {
-            path: '/edit-game/:gameName',
-            name: 'editGame',
-            component: EditGame
+            component: Admin,
+            children: [
+                {
+                    path: '',
+                    name: 'AdminIndex',
+                    component: AdminIndex
+                },
+                {
+                    path: 'create-game',
+                    name: 'CreateGame',
+                    component: CreateGame
+                },
+                {
+                    path: 'edit-game/:gameId',
+                    name: 'EditGame',
+                    component: EditGame
+                },
+            ]
         },
     ]
 })

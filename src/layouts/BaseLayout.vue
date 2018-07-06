@@ -6,9 +6,7 @@
             </div>
         </div>
         <div class="contents">
-            <div class="page-width">
-                <slot></slot>
-            </div>
+            <slot></slot>
         </div>
     </div>
 </template>
@@ -30,37 +28,5 @@
     {
         display: flex;
         align-items: baseline;
-    }
-
-    .team-name
-    {
-        margin-right: 20px;
-        font-weight: 500;
-    }
-
-    .nav--link
-    {
-        margin-right: 10px;
-        text-decoration: none;
-        color: cornflowerblue;
-    }
-
-    .router-link-exact-active
-    {
-        color: #000;
-    }
-
-    .logOut
-    {
-        padding: 4px 10px;
-        margin-left: auto;
-        border: thin solid rgba(0,0,0,0.5);
-        border-radius: 4px;
-        background: transparent;
-    }
-
-    .contents
-    {
-        margin: 20px 0;
     }
 </style>

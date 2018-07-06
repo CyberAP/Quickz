@@ -1,81 +1,37 @@
 <template>
     <div class="game">
-
-        <div class="countdown" v-if="countdown > 0">
-            <span class="countdown--value">{{countdown}}</span>
-        </div>
-        <div class="game--body">
-            <transition-group
-                    name="appear"
-                    tag="div"
-                    @enter="enter"
-                    @leave="leave"
-            >
-                <div
-                        v-if="!game.roundStarted"
-                        key="prepare"
-                        data-key="prepare"
-                >
-                    <h1>Prepare for the round</h1>
+        <div class="page-width">
+            <div class="countdown" v-if="countdown > 0">
+                <span class="countdown--value">{{countdown}}</span>
+            </div>
+            <div class="game--body">
+                <div v-if="!game">
+                    Welcome!
                 </div>
-            </transition-group>
+                <div v-else-if="!game.gameEnded">
 
-            <transition-group
-                    name="appear"
-                    tag="div"
-                    @enter="enter"
-                    @leave="leave"
-            >
-                <h1
-                        class="question"
-                        key="question"
-                        data-key="question"
-                        v-if="game.question && countdown < 1 && game.roundStarted"
-                >{{game.question}}</h1>
-            </transition-group>
+                    <div v-if="!game.roundStarted">
+                        <h1>Prepare for the round</h1>
+                    </div>
 
-            <transition-group
-                    name="appear"
-                    tag="div"
-                    @enter="enter"
-                    @leave="leave"
-            >
-                <div
-                        class="answer"
-                        key="answer"
-                        data-key="answer"
-                        v-if="game.answer && countdown < 1 && game.roundStarted"
-                >Answer: {{game.answer}}</div>
-            </transition-group>
+                    <h1 class="question" v-if="game.question && countdown < 1 && game.roundStarted">
+                        {{game.question}}
+                    </h1>
 
-            <transition-group
-                    name="appear"
-                    tag="div"
-                    @enter="enter"
-                    @leave="leave"
-            >
-                <button
-                        class="submit"
-                        key="submit"
-                        data-key="submit"
-                        @click="dispatch('attempt')"
-                        v-if="game.attempts && !(state.auth in game.attempts) && countdown < 1 && game.roundStarted && !presentation"
-                >Got the answer!</button>
-            </transition-group>
+                    <div class="answer" v-if="game.answer && countdown < 1 && game.roundStarted">
+                        Answer: {{game.answer}}
+                    </div>
 
-            <transition-group
-                    name="appear"
-                    tag="div"
-                    @enter="enter"
-                    @leave="leave"
-            >
-                <AttemptsList
-                        v-if="game.attempts && countdown < 1 && game.roundStarted"
-                        key="attempts"
-                        data-key="attempts"
-                        :controls="!presentation"
-                ></AttemptsList>
-            </transition-group>
+                    <button class="submit"
+                            @click="dispatch('attempt')"
+                            v-if="state.auth && game.attempts && !(state.auth in game.attempts) && countdown < 1 && game.roundStarted && !presentation"
+                    >Got the answer!</button>
+
+                    <AttemptsList v-if="game.attempts && countdown < 1 && game.roundStarted" :controls="!presentation" />
+
+                </div>
+                <ScoreBoard v-else-if="game.gameEnded" />
+            </div>
         </div>
     </div>
 </template>
@@ -107,7 +63,7 @@
         },
         computed: {
             game() { return this.state.game; },
-            countdownDate() { return this.state.game.countdownDate; }
+            countdownDate() { return this.state.game?.countdownDate; }
         },
         watch: {
             countdownDate: {
@@ -172,6 +128,44 @@
 
 <style scoped>
 
+    .game
+    {
+        margin: 20px 0;
+    }
+
+    .countdown
+    {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        text-align: center;
+        pointer-events: none;
+        display: flex;
+    }
+
+    .countdown--value
+    {
+        margin: auto;
+        font-size: 80vmin;
+        line-height: 1;
+        animation: countdown 1s infinite ease-in-out;
+    }
+
+    .submit
+    {
+        width: 100%;
+        padding: 20px;
+        border: none;
+        border-radius: 4px;
+        background-color: #5adc33;
+        color: #fff;
+        font-size: 30px;
+    }
+
+
+
     .question-enter
     {
         opacity: 0;
@@ -205,37 +199,6 @@
     {
         transition-duration: .3s;
         transition-delay: .3s;
-    }
-
-    .countdown
-    {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
-        text-align: center;
-        pointer-events: none;
-        display: flex;
-    }
-
-    .countdown--value
-    {
-        margin: auto;
-        font-size: 80vmin;
-        line-height: 1;
-        animation: countdown 1s infinite ease-in-out;
-    }
-
-    .submit
-    {
-        width: 100%;
-        padding: 20px;
-        border: none;
-        border-radius: 4px;
-        background-color: #5adc33;
-        color: #fff;
-        font-size: 30px;
     }
 
     @keyframes countdown
