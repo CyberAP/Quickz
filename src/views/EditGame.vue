@@ -1,5 +1,5 @@
 <template>
-    <div class="create-game">
+    <div class="edit-game">
         <GameEdit v-if="savedGame" :savedGame="savedGame"></GameEdit>
         <div class="page-width" v-else>
             <div>Game №{{gameId}} not found</div>
